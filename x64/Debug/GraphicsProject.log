@@ -1,6 +1,5 @@
-﻿  Source.cpp
-C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(109,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(110,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(111,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(112,31): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  GraphicsProject.vcxproj -> C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe
+﻿soil2-debug.lib(SOIL2.obj) : warning LNK4099: PDB '' was not found with 'soil2-debug.lib(SOIL2.obj)' or at ''; linking object as if no debug info
+soil2-debug.lib(image_DXT.obj) : warning LNK4099: PDB '' was not found with 'soil2-debug.lib(image_DXT.obj)' or at ''; linking object as if no debug info
+soil2-debug.lib(wfETC.obj) : warning LNK4099: PDB '' was not found with 'soil2-debug.lib(wfETC.obj)' or at ''; linking object as if no debug info
+soil2-debug.lib(image_helper.obj) : warning LNK4099: PDB '' was not found with 'soil2-debug.lib(image_helper.obj)' or at ''; linking object as if no debug info
+  GraphicsProject.vcxproj -> C:\Users\Dell\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe

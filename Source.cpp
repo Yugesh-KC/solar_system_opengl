@@ -1,4 +1,4 @@
-#include "SOIL2/SOIL2/SOIL2.h"  // Ensure this path is correct for your setup
+#include "SOIL2/SOIL2.h"  // Ensure this path is correct for your setup
 #include <cstdio>         // For printf
 #include <glut.h>
 
