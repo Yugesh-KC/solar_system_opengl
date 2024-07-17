@@ -1,13 +1,18 @@
-#include "SOIL2/SOIL2.h"  // Ensure this path is correct for your setup
-#include <cstdio>         // For printf
+#include "SOIL2/SOIL2.h"
+#include <cstdio>
+#include <cmath>
 #include <glut.h>
 
-// Rotation angles for the revolving planets and their own rotation
-float angle = 0.0f;
-float mercuryRotation = 0.0f;
-float venusRotation = 0.0f;
-float earthRotation = 0.0f;
-float marsRotation = 0.0f;
+// Global rotation angles for the planets and their own rotation
+float revolutionAngle = 0.0f;  // Angle for the revolution around the Sun
+float mercuryRotationAngle = 0.0f;
+float venusRotationAngle = 0.0f;
+float earthRotationAngle = 0.0f;
+float marsRotationAngle = 0.0f;
+
+// Frame rate parameters
+const int TARGET_FPS = 60;
+const float FRAME_DURATION = 1.0f / TARGET_FPS;
 
 // Function to load texture
 void loadTexture(GLuint* texture, const char* path) {
@@ -27,27 +32,21 @@ void loadTexture(GLuint* texture, const char* path) {
 class Planet {
 public:
     float radius;
-    float distance;
-    GLuint textureID;  // Texture ID
-    float rotationSpeed;  // Rotation speed for the planet's own axis
-    bool isCentral;
+    float distanceFromSun;
+    GLuint textureID;       // Texture ID
+    float rotationSpeed;    // Rotation speed for the planet's own axis
 
-    Planet(float rad, float dist, float speed, bool central = false) : radius(rad), distance(dist), textureID(0), rotationSpeed(speed), isCentral(central) {}
+    Planet(float radius, float distance, float rotationSpeed)
+        : radius(radius), distanceFromSun(distance), textureID(0), rotationSpeed(rotationSpeed) {}
 
     void loadTexture(const char* filename) {
         ::loadTexture(&textureID, filename);
     }
 
-    void draw() {
+    virtual void draw() {
         glBindTexture(GL_TEXTURE_2D, textureID);
         glEnable(GL_TEXTURE_2D);
         GLUquadric* quad = gluNewQuadric();
-        if (isCentral)
-        {
-            GLfloat emission[] =  { 0.5, 0.5, 0.5, 1.0 };
-            glMaterialfv(GL_FRONT, GL_EMISSION, emission);
-
-        }
         gluQuadricTexture(quad, GL_TRUE);
         gluSphere(quad, radius, 32, 32);
         gluDeleteQuadric(quad);
@@ -56,90 +55,117 @@ public:
 
     void drawAtPosition(float revolutionAngle, float rotationAngle) {
         glPushMatrix();
-        glRotatef(revolutionAngle, 0.0, 1.0, 0.0);
-        glTranslatef(distance, 0.0, 0.0);
-        glRotatef(rotationAngle, 0.0, 1.0, 0.0);  // Rotate around own axis
+        glRotatef(revolutionAngle, 0.0, 1.0, 0.0);   // Rotate around the Sun
+        glTranslatef(distanceFromSun, 0.0, 0.0);    // Position relative to the Sun
+        glRotatef(rotationAngle, 0.0, 1.0, 0.0);    // Rotate around own axis
         draw();
         glPopMatrix();
     }
 
     void updateRotation() {
-        rotationSpeed += 0.1f;  // Increment rotation angle
+        rotationSpeed += 0.1f;  // Increment rotation speed
     }
 };
 
-// Planets
-Planet centralPlanet(2.0f, 0.0f, 0.0f,true);  // The central planet does not have its own rotation
-Planet Mercury(0.5f, 3.0f, 0.13f);
-Planet Venus(0.7f, 5.0f, 0.12f);
-Planet Earth(0.8f, 7.0f, 0.1f);
-Planet Mars(0.9f, 8.0f, 0.1f);
+// Sun class, derived from Planet
+class Sun : public Planet {
+public:
+    Sun(float radius, float distance) : Planet(radius, distance, 0.0f) {}  
+
+    // Override draw method to customize appearance
+    void draw() override {
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glEnable(GL_TEXTURE_2D);
+        GLUquadric* quad = gluNewQuadric();
+        GLfloat emission[] = { 1.0, 1.0, 0.0, 1.0 };  // Yellowish emission for the Sun
+        glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+        gluQuadricTexture(quad, GL_TRUE);
+        gluSphere(quad, radius, 32, 32);
+        gluDeleteQuadric(quad);
+        glDisable(GL_TEXTURE_2D);
+    }
+
+    void drawAtPosition(float rotationAngle) {
+        glPushMatrix();
+        glRotatef(rotationAngle, 0.0, 1.0, 0.0);
+        draw();
+        glPopMatrix();
+    }
+};
+
+// Planets initialization
+Sun sun(2.0f, 0.0f);        // The Sun is a special case
+Planet mercury(0.5f, 3.0f, 0.13f);
+Planet venus(0.7f, 5.0f, 0.12f);
+Planet earth(0.8f, 7.0f, 1.0f);
+Planet mars(0.9f, 8.0f, 0.1f);
 
 void initialize() {
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glClearColor(0.0, 0.0, 0.0, 1.0);       // Set clear color to black
+    glEnable(GL_DEPTH_TEST);                // Enable depth testing
+    glEnable(GL_LIGHTING);                  // Enable lighting
+    glEnable(GL_LIGHT0);                    // Enable light source 0
+    glEnable(GL_COLOR_MATERIAL);            // Enable material coloring based on glColor
 
-    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
+    GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };  // Light position (directional)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-    glViewport(0, 0, 1024, 768);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0, 1024.0 / 768.0, 1.0, 100.0);
-    glMatrixMode(GL_MODELVIEW);
+    glViewport(0, 0, 1024, 768);            // Set viewport size
+    glMatrixMode(GL_PROJECTION);            // Switch to projection matrix mode
+    glLoadIdentity();                       // Load identity matrix
+    gluPerspective(45.0, 1024.0 / 768.0, 1.0, 100.0);  // Set perspective projection
+
+    glMatrixMode(GL_MODELVIEW);             // Switch to modelview matrix mode
 
     // Load textures after initializing OpenGL context
-    centralPlanet.loadTexture("textures/sun.jpg");
-    Mercury.loadTexture("textures/mercury.jpg");
-    Venus.loadTexture("textures/venus.jpg");
-    Earth.loadTexture("textures/earth.jpg");
-    Mars.loadTexture("textures/mars.jpg");
+    sun.loadTexture("textures/sun.jpg");
+    mercury.loadTexture("textures/mercury.jpg");
+    venus.loadTexture("textures/venus.jpg");
+    earth.loadTexture("textures/earth.jpg");
+    mars.loadTexture("textures/mars.jpg");
 }
 
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-    gluLookAt(10.0, 8.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear color and depth buffers
+    glLoadIdentity();                                   // Load identity matrix
+    gluLookAt(10.0, 8.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);  // Set camera position and orientation
 
-    centralPlanet.draw();
-    Mercury.drawAtPosition(angle * 4.15, mercuryRotation);
-    Venus.drawAtPosition(angle * 1.62, venusRotation);
-    Earth.drawAtPosition(angle * 1.0, earthRotation);
-    Mars.drawAtPosition(angle * 0.53, marsRotation);
+    // Draw each planet at its current position and rotation
+    sun.drawAtPosition(revolutionAngle);
+    mercury.drawAtPosition(revolutionAngle * 4.15f, mercuryRotationAngle);
+    venus.drawAtPosition(revolutionAngle * 1.62f, venusRotationAngle);
+    earth.drawAtPosition(revolutionAngle * 1.0f, earthRotationAngle);
+    mars.drawAtPosition(revolutionAngle * 0.53f, marsRotationAngle);
 
-    glutSwapBuffers();
+    glutSwapBuffers();  // Swap the front and back buffers (double buffering)
 }
 
-void idle() {
-    angle += 0.1f;
-    if (angle > 360.0f) {
-        angle -= 360.0f;
-    }
+void timer(int value) {
+    revolutionAngle += 1.0f;                            // Increment revolution angle for all planets
+    mercuryRotationAngle += mercury.rotationSpeed ;  // Update rotation angle for Mercury
+    venusRotationAngle += venus.rotationSpeed ;      // Update rotation angle for Venus
+    earthRotationAngle += earth.rotationSpeed ;      // Update rotation angle for Earth
+    marsRotationAngle += mars.rotationSpeed ;         // Update rotation angle for Mars
+    
+    printf("%f", earthRotationAngle);
 
-    mercuryRotation += Mercury.rotationSpeed;
-    venusRotation += Venus.rotationSpeed;
-    earthRotation += Earth.rotationSpeed;
-    marsRotation += Mars.rotationSpeed;
 
-    glutPostRedisplay();
+    glutPostRedisplay();                                // Request a redraw
+    glutTimerFunc(1000 / TARGET_FPS, timer, 0);         // Schedule next update
 }
 
 int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowSize(1024, 768);
-    glutCreateWindow("Planet Simulation");
+    glutInit(&argc, argv);                              // Initialize GLUT
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);  // Set display mode
+    glutInitWindowSize(1024, 768);                      // Set window size
+    glutCreateWindow("Solar System");                   // Create window with title
 
-    initialize();  // Initialize OpenGL context before loading textures
+    initialize();                                       // Initialize OpenGL context and textures
 
-    glutDisplayFunc(display);
-    glutIdleFunc(idle);
+    glutDisplayFunc(display);                           // Register display function
+    glutTimerFunc(0, timer, 0);                          // Start timer function for animation
 
-    glutMainLoop();
+    glutMainLoop();                                     // Enter GLUT main loop
 
     return 0;
 }
