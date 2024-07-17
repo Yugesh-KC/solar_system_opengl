@@ -1,2 +1,6 @@
 ﻿  Source.cpp
-  GraphicsProject.vcxproj -> C:\Users\Dell\Desktop\GraphicsProject\x64\Debug\GraphicsProject.exe
+C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(109,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(110,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(111,32): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\Source.cpp(112,31): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  GraphicsProject.vcxproj -> C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe
