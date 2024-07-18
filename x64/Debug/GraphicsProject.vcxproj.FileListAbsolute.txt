@@ -1,3 +1,4 @@
 C:\Users\Dell\Desktop\GraphicsProject\x64\Debug\GraphicsProject.exe
 C:\Users\Oshika Neupane\OneDrive\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe
 C:\Users\Dell\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\x64\Debug\GraphicsProject.exe

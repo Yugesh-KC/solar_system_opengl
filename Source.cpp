@@ -15,6 +15,15 @@ float moonRotationAngle = 0.0f;
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^no need to change this block^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+//Saturn
+float saturnRadius = 0.2f; 
+float saturnDistance = 6.0f; 
+float saturnRotationSpeed = 1.2f;
+float saturnringInnerRadius = 0.25f;
+float saturnringOuterRadius = 0.4f;
+float saturnRevolutionSpeed = 1.0f;
+float saturnRotationAngle = 1.0f;
+//float saturnRotationSpeed = 1.0f;
 
 
 // Revolution speeds
@@ -39,6 +48,7 @@ float mercuryRadius = 0.1f;
 float venusRadius = 0.2f;
 float earthRadius = 0.3f;
 float marsRadius = 0.3f;
+
 float moonRadius = 0.05f;
 
 float mercuryDistance = 3.0f;
@@ -57,6 +67,7 @@ Planet mercury(mercuryRadius, mercuryDistance, mercuryRotationSpeed);
 Planet venus(venusRadius, venusDistance, venusRotationSpeed);
 Planet earth(earthRadius, earthDistance, earthRotationSpeed);
 Planet mars(marsRadius, marsDistance, marsRotationSpeed);
+RingPlanet saturn(saturnRadius, saturnDistance, saturnRotationSpeed, saturnringInnerRadius, saturnringOuterRadius);
 Moon moon(moonRadius, moonDistance, moonRotationSpeed);
 
 void initialize() {
@@ -83,6 +94,9 @@ void initialize() {
     earth.loadTexture("textures/earth.jpg");
     mars.loadTexture("textures/mars.jpg");
     moon.loadTexture("textures/mercury.jpg");
+
+    saturn.loadTexture("textures/saturn.jpg");
+    saturn.loadRingTexture("textures/saturnring.jpg");
 }
 
 void display() {
@@ -98,6 +112,9 @@ void display() {
     mars.drawAtPosition(revolutionAngle * marsRevolutionSpeed, marsRotationAngle);
     moon.drawAtPosition(earth.x, earth.y, earth.z, revolutionAngle * moonRevolutionSpeed, moonRotationAngle);
 
+    saturn.drawAtPosition(revolutionAngle * saturnRevolutionSpeed, saturnRotationAngle);
+
+
     glutSwapBuffers();  // Swap the front and back buffers (double buffering)
 }
 
@@ -109,6 +126,8 @@ void timer(int value) {
     earthRotationAngle += earthRotationSpeed;        // Update rotation angle for Earth
     marsRotationAngle += marsRotationSpeed;          // Update rotation angle for Mars
     moonRotationAngle += moonRotationSpeed;          // Update rotation angle for Moon
+    saturnRotationAngle += saturnRotationSpeed;          // Update rotation angle for Moon
+
 
     printf("earth %f %f %f \n", earth.x, earth.y, earth.z);
 

@@ -1,0 +1,31 @@
+﻿  Source.cpp
+Source.obj : error LNK2019: unresolved external symbol _SOIL_load_OGL_texture referenced in function "void __cdecl loadTexture(unsigned int *,char const *)" (?loadTexture@@YAXPAIPBD@Z)
+Source.obj : error LNK2019: unresolved external symbol _SOIL_last_result referenced in function "void __cdecl loadTexture(unsigned int *,char const *)" (?loadTexture@@YAXPAIPBD@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glBindTexture@8 referenced in function "public: virtual void __thiscall Moon::draw(void)" (?draw@Moon@@UAEXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glClear@4 referenced in function "void __cdecl display(void)" (?display@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glClearColor@16 referenced in function "void __cdecl initialize(void)" (?initialize@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glDisable@4 referenced in function "public: virtual void __thiscall Moon::draw(void)" (?draw@Moon@@UAEXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glEnable@4 referenced in function "public: virtual void __thiscall Moon::draw(void)" (?draw@Moon@@UAEXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glLightfv@12 referenced in function "void __cdecl initialize(void)" (?initialize@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glLoadIdentity@0 referenced in function "void __cdecl display(void)" (?display@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glMaterialfv@12 referenced in function "public: virtual void __thiscall Sun::draw(void)" (?draw@Sun@@UAEXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glMatrixMode@4 referenced in function "void __cdecl initialize(void)" (?initialize@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glPopMatrix@0 referenced in function "public: void __thiscall Moon::drawAtPosition(float,float,float,float,float)" (?drawAtPosition@Moon@@QAEXMMMMM@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glPushMatrix@0 referenced in function "public: void __thiscall Moon::drawAtPosition(float,float,float,float,float)" (?drawAtPosition@Moon@@QAEXMMMMM@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glRotatef@16 referenced in function "public: void __thiscall Moon::drawAtPosition(float,float,float,float,float)" (?drawAtPosition@Moon@@QAEXMMMMM@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glTranslatef@12 referenced in function "public: void __thiscall Moon::drawAtPosition(float,float,float,float,float)" (?drawAtPosition@Moon@@QAEXMMMMM@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glViewport@16 referenced in function "void __cdecl initialize(void)" (?initialize@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glutInitWindowSize@8 referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol __imp__glutInitDisplayMode@4 referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol __imp__glutMainLoop@0 referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol __imp__glutPostRedisplay@0 referenced in function "void __cdecl timer(int)" (?timer@@YAXH@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glutSwapBuffers@0 referenced in function "void __cdecl display(void)" (?display@@YAXXZ)
+Source.obj : error LNK2019: unresolved external symbol __imp__glutTimerFunc@12 referenced in function "void __cdecl timer(int)" (?timer@@YAXH@Z)
+Source.obj : error LNK2019: unresolved external symbol __imp__glutDisplayFunc@4 referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol __imp____glutInitWithExit@12 referenced in function _glutInit_ATEXIT_HACK@8
+Source.obj : error LNK2019: unresolved external symbol __imp____glutCreateWindowWithExit@8 referenced in function _glutCreateWindow_ATEXIT_HACK@4
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib\freeglut.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib\glew32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib\opengl32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib\freeglutd.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\Debug\GraphicsProject.exe : fatal error LNK1120: 25 unresolved externals

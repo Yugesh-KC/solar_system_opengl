@@ -70,16 +70,27 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\dll;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\External Libraries\SOIL2\lib;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\dll;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\External Libraries\SOIL2\lib;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freetype-gl.lib;assimp-vc143-mt.lib;soil2-debug.lib;meshoptimizer.lib;freetype.lib;freeglut.lib;glew32.lib;glfw3.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\dll;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\External Libraries\SOIL2</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,13 +115,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Dell\Desktop\GraphicsProject\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Dell\Desktop\solar_system_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;freeglutd.lib;glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;soil2-debug.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\dll;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\lib;C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\External Libraries\SOIL2</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freetype-gl.lib;assimp-vc143-mt.lib;soil2-debug.lib;meshoptimizer.lib;freetype.lib;freeglut.lib;glew32.lib;glfw3.lib;opengl32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -134,8 +145,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Dell\Desktop\solar_system_opengl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\Dell\Desktop\solar_system_opengl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Dell\Desktop\Computer_graphics\solar_system_opengl\include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

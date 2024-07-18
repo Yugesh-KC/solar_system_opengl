@@ -65,6 +65,40 @@ public:
     }
 };
 
+class RingPlanet : public Planet {
+public:
+    float ringInnerRadius;
+    float ringOuterRadius;
+    GLuint ringTextureID;  // Texture ID for the rings
+
+    RingPlanet(float radius, float distance, float rotationSpeed, float ringInnerRadius, float ringOuterRadius)
+        : Planet(radius, distance, rotationSpeed),
+        ringInnerRadius(ringInnerRadius), ringOuterRadius(ringOuterRadius), ringTextureID(0) {
+    }
+
+    void loadRingTexture(const char* filename) {
+        ::loadTexture(&ringTextureID, filename);
+    }
+
+    void drawRings() {
+        glBindTexture(GL_TEXTURE_2D, ringTextureID);
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_TRIANGLE_STRIP);
+        for (float angle = 0.0f; angle <= 2.0f * 3.14159f + 0.1f; angle += 0.1f) { // added 0.1f to ensure closure
+            glTexCoord2f(0.0f, 0.0f); glVertex3f(ringInnerRadius * cos(angle), 0.0f, ringInnerRadius * sin(angle));
+            glTexCoord2f(1.0f, 1.0f); glVertex3f(ringOuterRadius * cos(angle), 0.0f, ringOuterRadius * sin(angle));
+        }
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+    void draw() override {
+        Planet::draw();  // Draw the planet
+        drawRings();     // Draw the rings
+    }
+};
+
 // Sun class, derived from Planet
 class Sun : public Planet {
 public:
