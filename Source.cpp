@@ -3,7 +3,7 @@
 #include <cmath>
 #include <glut.h>
 #include "planets.h"
-
+bool showOrbits = true;
 // Global rotation angles for the planets and their own rotation
 float revolutionAngle = 0.0f;
 float sunRotationAngle = 0.0f;
@@ -59,6 +59,20 @@ Planet earth(earthRadius, earthDistance, earthRotationSpeed);
 Planet mars(marsRadius, marsDistance, marsRotationSpeed);
 Moon moon(moonRadius, moonDistance, moonRotationSpeed);
 
+
+void toggleOrbitsVisibility() {
+    showOrbits = !showOrbits; // Toggle the state
+}
+void keyboard(unsigned char key, int x, int y) {
+    switch (key) {
+    case 'o':
+    case 'O':
+        toggleOrbitsVisibility();
+        glutPostRedisplay(); // Request a redraw to reflect the change
+        break;
+    }
+}
+
 void initialize() {
     glClearColor(0.0, 0.0, 0.0, 1.0);       // Set clear color to black
     glEnable(GL_DEPTH_TEST);                // Enable depth testing
@@ -91,6 +105,17 @@ void display() {
     gluLookAt(10.0, 8.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);  // Set camera position and orientation
 
     // Draw each planet at its current position and rotation
+    GLfloat noEmission[] = { 0.0, 0.0, 0.0, 1.0 };
+    glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
+    if (showOrbits) {
+        // Draw orbits with specific material properties
+        mercury.drawOrbit();
+        venus.drawOrbit();
+        earth.drawOrbit();
+        mars.drawOrbit();
+        moon.drawOrbit(earth.distanceFromSun, earth.x, earth.z);
+    }
+    
     sun.drawAtPosition(sunRotationAngle);
     mercury.drawAtPosition(revolutionAngle * mercuryRevolutionSpeed, mercuryRotationAngle);
     venus.drawAtPosition(revolutionAngle * venusRevolutionSpeed, venusRotationAngle);
@@ -126,7 +151,7 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(display);                           // Register display function
     glutTimerFunc(0, timer, 0);                         // Start timer function for animation
-
+    glutKeyboardFunc(keyboard);
     glutMainLoop();                                     // Enter GLUT main loop
 
     return 0;

@@ -1,3 +1,4 @@
+
 #pragma once
 #include "SOIL2/SOIL2.h"
 #include <cstdio>
@@ -32,6 +33,26 @@ public:
     Planet(float radius, float distance, float rotationSpeed)
         : radius(radius), distanceFromSun(distance), textureID(0), rotationSpeed(rotationSpeed) {
     }
+    void drawOrbit() {
+        glDisable(GL_TEXTURE_2D);
+        const int segments = 100;
+
+        // Set material properties for the orbits
+        GLfloat orbitColor[] = { 0.8f, 0.8f, 0.8f, 1.0f }; // Light gray color
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, orbitColor);
+
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < segments; ++i) {
+            float theta = 2.0f * 3.14159f * float(i) / float(segments);
+            float ox = distanceFromSun * cos(theta);
+            float oz = distanceFromSun * sin(theta);
+            glVertex3f(ox, 0.0f, oz);
+        }
+        glEnd();
+
+        glEnable(GL_TEXTURE_2D);
+    }
+
 
     void loadTexture(const char* filename) {
         ::loadTexture(&textureID, filename);
@@ -54,8 +75,8 @@ public:
         z = distanceFromSun * sin(revolutionAngle * 3.14159f / 180.0f);
         //glRotatef(revolutionAngle, 0.0, 1.0, 0.0);   // Rotate around the Sun
         glTranslatef(x, 0.0, z);    // Position relative to the Sun
-        glRotatef(rotationAngle*rotation_multiplier, 0.0, 1.0, 0.0);    // Rotate around own axis
-       
+        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);    // Rotate around own axis
+
         draw();
         glPopMatrix();
     }
@@ -85,7 +106,7 @@ public:
 
     void drawAtPosition(float rotationAngle) {
         glPushMatrix();
-        glRotatef(rotationAngle*rotation_multiplier, 0.0, 1.0, 0.0);
+        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
         draw();
         glPopMatrix();
     }
@@ -103,14 +124,14 @@ public:
         glTranslatef(planetX, planetY, planetZ);
 
         // Calculate moon's position relative to parent planet
-        x = distanceFromSun * cos(revolutionAngle * 3.14159f /180.0f);
+        x = distanceFromSun * cos(revolutionAngle * 3.14159f / 180.0f);
         z = distanceFromSun * sin(revolutionAngle * 3.14159f / 180.0f);
 
         // Translate to moon's position relative to the parent planet
         glTranslatef(x, 0.0, z);
-        printf("moon %f %f \n", planetX + x,planetZ+z);
+        printf("moon %f %f \n", planetX + x, planetZ + z);
         // Rotate around own axis
-        glRotatef(rotationAngle*rotation_multiplier, 0.0, 1.0, 0.0);
+        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
 
         // Draw the moon
         draw();
@@ -126,5 +147,25 @@ public:
         gluSphere(quad, radius, 32, 32);
         gluDeleteQuadric(quad);
         glDisable(GL_TEXTURE_2D);
+    }
+
+    void drawOrbit(float parentDistanceFromSun, float parentX, float parentZ) {
+        glDisable(GL_TEXTURE_2D);
+        const int segments = 100;
+
+        // Set material properties for the orbit
+        GLfloat orbitColor[] = { 0.8f, 0.8f, 0.8f, 1.0f }; // Light gray color
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, orbitColor);
+
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < segments; ++i) {
+            float theta = 2.0f * 3.14159f * float(i) / float(segments);
+            float ox = distanceFromSun * cos(theta);
+            float oz = distanceFromSun * sin(theta);
+            glVertex3f(parentX + ox, 0.0f, parentZ + oz);
+        }
+        glEnd();
+
+        glEnable(GL_TEXTURE_2D);
     }
 };
