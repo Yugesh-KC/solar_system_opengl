@@ -51,14 +51,33 @@ float moonDistance = 2.0f;  // Distance from Earth
 const int TARGET_FPS = 60;
 const float FRAME_DURATION = 1.0f / TARGET_FPS;
 
-// Planets initialization
-Sun sun(sunRadius, 0.0f, sunRotationSpeed);
-Planet mercury(mercuryRadius, mercuryDistance, mercuryRotationSpeed);
-Planet venus(venusRadius, venusDistance, venusRotationSpeed);
-Planet earth(earthRadius, earthDistance, earthRotationSpeed);
-Planet mars(marsRadius, marsDistance, marsRotationSpeed);
-Moon moon(moonRadius, moonDistance, moonRotationSpeed);
+//rotation periods
+float mercuryPeriod = 58.6f;
+float venusPeriod = 243.0f;
+float earthPeriod = 1.0f;
+float marsPeriod = 1.03f;
+float moonPeriod = 27.3f;
+float sunPeriod = 25.0f;
+float saturnPeriod = 243.0f;
+//Saturn
+float saturnRadius = 0.2f;
+float saturnDistance = 6.0f;
 
+float saturnringInnerRadius = 0.25f;
+float saturnringOuterRadius = 0.4f;
+float saturnRevolutionSpeed = 1.0f;
+float saturnRotationAngle = 1.0f;
+//float saturnRotationSpeed = 1.0f;
+
+
+// Planets initialization
+Sun sun(sunRadius, 0.0f, sunPeriod);
+Planet mercury(mercuryRadius, mercuryDistance, mercuryPeriod);
+Planet venus(venusRadius, venusDistance, venusPeriod);
+Planet earth(earthRadius, earthDistance, earthPeriod);
+Planet mars(marsRadius, marsDistance, marsPeriod);
+Moon moon(moonRadius, moonDistance, moonPeriod);
+RingPlanet saturn(saturnRadius, saturnDistance, saturnPeriod, saturnringInnerRadius, saturnringOuterRadius);
 
 void toggleOrbitsVisibility() {
     showOrbits = !showOrbits; // Toggle the state
@@ -71,6 +90,13 @@ void keyboard(unsigned char key, int x, int y) {
         glutPostRedisplay(); // Request a redraw to reflect the change
         break;
     }
+}
+void reshape(int w, int h) {
+    glViewport(0, 0, w, h);                 // Set viewport to cover the new window
+    glMatrixMode(GL_PROJECTION);            // Switch to projection matrix mode
+    glLoadIdentity();                       // Load identity matrix
+    gluPerspective(45.0, (float)w / (float)h, 1.0, 100.0);  // Set perspective projection
+    glMatrixMode(GL_MODELVIEW);             // Switch back to modelview matrix mode
 }
 
 void initialize() {
@@ -97,6 +123,8 @@ void initialize() {
     earth.loadTexture("textures/earth.jpg");
     mars.loadTexture("textures/mars.jpg");
     moon.loadTexture("textures/mercury.jpg");
+    saturn.loadTexture("textures/saturn.jpg");
+    saturn.loadRingTexture("textures/saturnring.jpg");
 }
 
 void display() {
@@ -113,15 +141,18 @@ void display() {
         venus.drawOrbit();
         earth.drawOrbit();
         mars.drawOrbit();
-        moon.drawOrbit(earth.distanceFromSun, earth.x, earth.z);
+        saturn.drawOrbit();
+        //moon.drawOrbit(earth.distanceFromSun, earth.x, earth.z);
     }
     
-    sun.drawAtPosition(sunRotationAngle);
-    mercury.drawAtPosition(revolutionAngle * mercuryRevolutionSpeed, mercuryRotationAngle);
-    venus.drawAtPosition(revolutionAngle * venusRevolutionSpeed, venusRotationAngle);
-    earth.drawAtPosition(revolutionAngle * earthRevolutionSpeed, earthRotationAngle);
-    mars.drawAtPosition(revolutionAngle * marsRevolutionSpeed, marsRotationAngle);
-    moon.drawAtPosition(earth.x, earth.y, earth.z, revolutionAngle * moonRevolutionSpeed, moonRotationAngle);
+    sun.drawAtPosition();
+    mercury.drawAtPosition();
+    venus.drawAtPosition();
+    earth.drawAtPosition();
+    mars.drawAtPosition();
+    saturn.drawAtPosition();
+
+    moon.drawAtPosition(earth.x, earth.y, earth.z);
 
     glutSwapBuffers();  // Swap the front and back buffers (double buffering)
 }
@@ -148,6 +179,7 @@ int main(int argc, char** argv) {
     glutCreateWindow("Solar System");                   // Create window with title
 
     initialize();                                       // Initialize OpenGL context and textures
+    glutReshapeFunc(reshape);
 
     glutDisplayFunc(display);                           // Register display function
     glutTimerFunc(0, timer, 0);                         // Start timer function for animation

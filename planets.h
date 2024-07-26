@@ -1,11 +1,13 @@
-
 #pragma once
 #include "SOIL2/SOIL2.h"
 #include <cstdio>
 #include <cmath>
 #include <glut.h>
 
-int rotation_multiplier = 3;
+// Constants
+const float EARTH_DAYS_IN_YEAR = 365.25;
+const float DEGREES_IN_CIRCLE = 360.0;
+float rotation_multiplier = 0.3;
 
 // Function to load texture
 void loadTexture(GLuint* texture, const char* path) {
@@ -27,12 +29,27 @@ public:
     float radius;
     float distanceFromSun;
     GLuint textureID;       // Texture ID
-    float rotationSpeed;    // Rotation speed for the planet's own axis
+    float rotationSpeed;    // in degrees per day
+    float revolutionSpeed;  // in degrees per day
+    float currentRotationAngle;
+    float currentRevolutionAngle;
     float x, y, z;
 
-    Planet(float radius, float distance, float rotationSpeed)
-        : radius(radius), distanceFromSun(distance), textureID(0), rotationSpeed(rotationSpeed) {
+    Planet(float radius, float distance, float rotationPeriod)
+        : radius(radius), distanceFromSun(distance), textureID(0), currentRotationAngle(0), currentRevolutionAngle(0) {
+        // Calculate the orbital period in Earth years
+        float orbitalPeriodYears = pow(distanceFromSun, 1.5);
+
+        // Convert the orbital period to days
+        float orbitalPeriodDays = orbitalPeriodYears * EARTH_DAYS_IN_YEAR;
+
+        // Calculate revolution speed in degrees per day
+        revolutionSpeed = DEGREES_IN_CIRCLE / orbitalPeriodDays;
+
+        // Calculate rotation speed in degrees per day
+        rotationSpeed = DEGREES_IN_CIRCLE / rotationPeriod;
     }
+
     void drawOrbit() {
         glDisable(GL_TEXTURE_2D);
         const int segments = 100;
@@ -53,7 +70,6 @@ public:
         glEnable(GL_TEXTURE_2D);
     }
 
-
     void loadTexture(const char* filename) {
         ::loadTexture(&textureID, filename);
     }
@@ -68,29 +84,26 @@ public:
         glDisable(GL_TEXTURE_2D);
     }
 
+    void drawAtPosition() {
+        currentRevolutionAngle += revolutionSpeed;
+        currentRotationAngle += rotationSpeed;
 
-    void drawAtPosition(float revolutionAngle, float rotationAngle) {
         glPushMatrix();
-        x = distanceFromSun * cos(revolutionAngle * 3.14159f / 180.0f);
-        z = distanceFromSun * sin(revolutionAngle * 3.14159f / 180.0f);
-        //glRotatef(revolutionAngle, 0.0, 1.0, 0.0);   // Rotate around the Sun
+        x = distanceFromSun * cos(currentRevolutionAngle * 3.14159f / 180.0f);
+        z = distanceFromSun * sin(currentRevolutionAngle * 3.14159f / 180.0f);
         glTranslatef(x, 0.0, z);    // Position relative to the Sun
-        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);    // Rotate around own axis
+        glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);    // Rotate around own axis
 
         draw();
         glPopMatrix();
-    }
-
-    void updateRotation() {
-        rotationSpeed += 0.1f;  // Increment rotation speed
     }
 };
 
 // Sun class, derived from Planet
 class Sun : public Planet {
 public:
-    Sun(float radius, float distance, float rotationSpeed)
-        : Planet(radius, distance, rotationSpeed) {}
+    Sun(float radius, float distance, float rotationPeriod)
+        : Planet(radius, distance, rotationPeriod) {}
     // Override draw method to customize appearance
     void draw() override {
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -104,9 +117,11 @@ public:
         glDisable(GL_TEXTURE_2D);
     }
 
-    void drawAtPosition(float rotationAngle) {
+    void drawAtPosition() {
+        currentRotationAngle += rotationSpeed;
+
         glPushMatrix();
-        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
+        glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
         draw();
         glPopMatrix();
     }
@@ -114,24 +129,27 @@ public:
 
 class Moon : public Planet {
 public:
-    Moon(float radius, float distance, float rotationSpeed)
-        : Planet(radius, distance, rotationSpeed) {}
+    Moon(float radius, float distance, float rotationPeriod)
+        : Planet(radius, distance, rotationPeriod) {}
 
-    void drawAtPosition(float planetX, float planetY, float planetZ, float revolutionAngle, float rotationAngle) {
+    void drawAtPosition(float planetX, float planetY, float planetZ) {
+        currentRevolutionAngle += revolutionSpeed;
+        currentRotationAngle += rotationSpeed;
+
         glPushMatrix();
 
         // Translate to the parent planet's position
         glTranslatef(planetX, planetY, planetZ);
 
         // Calculate moon's position relative to parent planet
-        x = distanceFromSun * cos(revolutionAngle * 3.14159f / 180.0f);
-        z = distanceFromSun * sin(revolutionAngle * 3.14159f / 180.0f);
+        x = distanceFromSun * cos(currentRevolutionAngle * 3.14159f / 180.0f);
+        z = distanceFromSun * sin(currentRevolutionAngle * 3.14159f / 180.0f);
 
         // Translate to moon's position relative to the parent planet
         glTranslatef(x, 0.0, z);
-        printf("moon %f %f \n", planetX + x, planetZ + z);
+
         // Rotate around own axis
-        glRotatef(rotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
+        glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
 
         // Draw the moon
         draw();
@@ -167,5 +185,40 @@ public:
         glEnd();
 
         glEnable(GL_TEXTURE_2D);
+    }
+
+};
+
+class RingPlanet : public Planet {
+public:
+    float ringInnerRadius;
+    float ringOuterRadius;
+    GLuint ringTextureID;  // Texture ID for the rings
+
+    RingPlanet(float radius, float distance, float rotationPeriod, float ringInnerRadius, float ringOuterRadius)
+        : Planet(radius, distance, rotationPeriod),
+        ringInnerRadius(ringInnerRadius), ringOuterRadius(ringOuterRadius), ringTextureID(0) {
+    }
+
+    void loadRingTexture(const char* filename) {
+        ::loadTexture(&ringTextureID, filename);
+    }
+
+    void drawRings() {
+        glBindTexture(GL_TEXTURE_2D, ringTextureID);
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_TRIANGLE_STRIP);
+        for (float angle = 0.0f; angle <= 2.0f * 3.14159f + 0.1f; angle += 0.1f) { // added 0.1f to ensure closure
+            glTexCoord2f(0.0f, 0.0f); glVertex3f(ringInnerRadius * cos(angle), 0.0f, ringInnerRadius * sin(angle));
+            glTexCoord2f(1.0f, 1.0f); glVertex3f(ringOuterRadius * cos(angle), 0.0f, ringOuterRadius * sin(angle));
+        }
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+    void draw() override {
+        Planet::draw();  // Draw the planet
+        drawRings();     // Draw the rings
     }
 };
