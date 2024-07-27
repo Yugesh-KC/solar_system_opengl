@@ -11,18 +11,18 @@ float mercuryRotationAngle = 0.0f;
 float venusRotationAngle = 0.0f;
 float earthRotationAngle = 0.0f;
 float marsRotationAngle = 0.0f;
+float saturnRotationAngle = 1.0f;
+float jupitorRotationAngle = 1.0f;
+
+
 float moonRotationAngle = 0.0f;
+
 
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^no need to change this block^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-//Saturn
-float saturnRadius = 0.2f; 
-float saturnDistance = 6.0f; 
-float saturnRotationSpeed = 1.2f;
+//Ring Radius
 float saturnringInnerRadius = 0.25f;
 float saturnringOuterRadius = 0.4f;
-float saturnRevolutionSpeed = 1.0f;
-float saturnRotationAngle = 1.0f;
 //float saturnRotationSpeed = 1.0f;
 
 
@@ -31,6 +31,9 @@ float mercuryRevolutionSpeed = 3.0f;
 float venusRevolutionSpeed = 2.0f;
 float earthRevolutionSpeed = 1.0f;
 float marsRevolutionSpeed = 4.0f;
+float saturnRevolutionSpeed = 1.0f;
+
+
 float moonRevolutionSpeed = 7.0f;
 float revolutionSpeed = 2.2f;
 
@@ -40,6 +43,9 @@ float mercuryRotationSpeed = 2.13f;
 float venusRotationSpeed = 2.12f;
 float earthRotationSpeed = 1.0f;
 float marsRotationSpeed = 1.1f;
+float saturnRotationSpeed = 1.2f;
+
+
 float moonRotationSpeed = 1.3f;
 
 // Sizes and distances
@@ -48,13 +54,17 @@ float mercuryRadius = 0.1f;
 float venusRadius = 0.2f;
 float earthRadius = 0.3f;
 float marsRadius = 0.3f;
+float saturnRadius = 0.2f;
 
 float moonRadius = 0.05f;
 
+//Distance
 float mercuryDistance = 3.0f;
 float venusDistance = 5.0f;
 float earthDistance = 7.0f;
 float marsDistance = 8.0f;
+float saturnDistance = 6.0f;
+
 float moonDistance = 2.0f;  // Distance from Earth
 
 // Frame rate parameters
