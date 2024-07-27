@@ -5,6 +5,7 @@
 #include "planets.h"
 
 bool showOrbits = true;
+
 // Global rotation angles for the planets and their own rotation
 float revolutionAngle = 0.0f;
 float sunRotationAngle = 0.0f;
@@ -13,21 +14,18 @@ float venusRotationAngle = 0.0f;
 float earthRotationAngle = 0.0f;
 float marsRotationAngle = 0.0f;
 float moonRotationAngle = 0.0f;
-
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^no need to change this block^^^^^^^^^^^^^^^^^^^^^^^^^^
+float jupiterRotationAngle = 0.0f;
+float uranusRotationAngle = 0.0f;
+float neptuneRotationAngle = 0.0f;
+float plutoRotationAngle = 0.0f;
 
 // Camera parameters
 float camX = 30.0f, camY = 10.0f, camZ = 5.0f;
 float centreX = 0.0f, centreY = 0.0f, centreZ = 0.0f;
 float upX = 0.0f, upY = 1.0f, upZ = 0.0f;
-float diffX, diffY, diffZ, sum;
-
 
 const float movementSpeed = 0.4f;
-const float rotationSpeed = 0.04f; //for camera
-
-
-
+const float rotationSpeed = 0.04f; // for camera
 
 // Revolution speeds
 float mercuryRevolutionSpeed = 3.0f;
@@ -35,7 +33,10 @@ float venusRevolutionSpeed = 2.0f;
 float earthRevolutionSpeed = 1.0f;
 float marsRevolutionSpeed = 4.0f;
 float moonRevolutionSpeed = 7.0f;
-float revolutionSpeed = 2.2f;
+float jupiterRevolutionSpeed = 2.0f;
+float uranusRevolutionSpeed = 1.0f;
+float neptuneRevolutionSpeed = 0.6f;
+float plutoRevolutionSpeed = 0.5f;
 
 // Rotation speeds
 float sunRotationSpeed = 1.0f;
@@ -44,6 +45,10 @@ float venusRotationSpeed = 2.12f;
 float earthRotationSpeed = 1.0f;
 float marsRotationSpeed = 1.1f;
 float moonRotationSpeed = 1.3f;
+float jupiterRotationSpeed = 1.0f;
+float uranusRotationSpeed = 1.0f;
+float neptuneRotationSpeed = 0.9f;
+float plutoRotationSpeed = 0.8f;
 
 // Sizes and distances
 float sunRadius = 1.0f;
@@ -52,12 +57,20 @@ float venusRadius = 0.2f;
 float earthRadius = 0.3f;
 float marsRadius = 0.3f;
 float moonRadius = 0.05f;
+float jupiterRadius = 0.5f;
+float uranusRadius = 0.3f;
+float neptuneRadius = 0.2f;
+float plutoRadius = 0.1f;
 
 float mercuryDistance = 3.0f;
 float venusDistance = 5.0f;
 float earthDistance = 7.0f;
 float marsDistance = 8.0f;
 float moonDistance = 2.0f;  // Distance from Earth
+float jupiterDistance = 10.0f;
+float uranusDistance = 12.0f;
+float neptuneDistance = 15.0f;
+float plutoDistance = 18.0f;
 
 // Frame rate parameters
 const int TARGET_FPS = 60;
@@ -70,12 +83,11 @@ float earthPeriod = 1.0f;
 float marsPeriod = 1.03f;
 float moonPeriod = 27.3f;
 float sunPeriod = 25.0f;
-float saturnPeriod = 243.0f;
+float saturnPeriod = 29.4f;
 
 // Saturn
 float saturnRadius = 0.2f;
 float saturnDistance = 6.0f;
-
 float saturnringInnerRadius = 0.25f;
 float saturnringOuterRadius = 0.4f;
 float saturnRevolutionSpeed = 1.0f;
@@ -89,6 +101,10 @@ Planet earth(earthRadius, earthDistance, earthPeriod);
 Planet mars(marsRadius, marsDistance, marsPeriod);
 Moon moon(moonRadius, moonDistance, moonPeriod);
 RingPlanet saturn(saturnRadius, saturnDistance, saturnPeriod, saturnringInnerRadius, saturnringOuterRadius);
+Planet jupiter(jupiterRadius, jupiterDistance, jupiterRevolutionSpeed);
+Planet uranus(uranusRadius, uranusDistance, uranusRevolutionSpeed);
+Planet neptune(neptuneRadius, neptuneDistance, neptuneRevolutionSpeed);
+Planet pluto(plutoRadius, plutoDistance, plutoRevolutionSpeed);
 
 void toggleOrbitsVisibility() {
     showOrbits = !showOrbits; // Toggle the state
@@ -112,7 +128,7 @@ void updateCamera(float angle, float x, float y, float z) {
 
     float newZ = ((1 - cosAngle) * x * z - y * sinAngle) * viewDirX +
         ((1 - cosAngle) * y * z + x * sinAngle) * viewDirY +
-        (cosAngle + (1 - cosAngle) * z * z) * viewDirZ;                         //kei tha xaina yo ta gpt ho purai
+        (cosAngle + (1 - cosAngle) * z * z) * viewDirZ;
 
     centreX = camX + newX;
     centreY = camY + newY;
@@ -132,7 +148,7 @@ void special(int key, int x, int y) {
 
     float rightX = upY * viewDirZ - upZ * viewDirY;
     float rightY = upZ * viewDirX - upX * viewDirZ;
-    float rightZ = upX * viewDirY - upY * viewDirX;                                 //sab gpt
+    float rightZ = upX * viewDirY - upY * viewDirX;
 
     float rightLength = sqrt(rightX * rightX + rightY * rightY + rightZ * rightZ);
     rightX /= rightLength;
@@ -161,6 +177,7 @@ void special(int key, int x, int y) {
 
     glutPostRedisplay();
 }
+
 void keyboard(unsigned char key, int x, int y) {
     float viewDirX = centreX - camX;
     float viewDirY = centreY - camY;
@@ -184,6 +201,11 @@ void keyboard(unsigned char key, int x, int y) {
     rightZ /= rightLength;
 
     switch (key) {
+
+    case 'o':
+        toggleOrbitsVisibility();
+        break;
+
     case 'd':
         // Strafe left
         camX -= rightX * movementSpeed;
@@ -241,8 +263,6 @@ void keyboard(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-
-
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);                 // Set viewport to cover the new window
     glMatrixMode(GL_PROJECTION);            // Switch to projection matrix mode
@@ -258,9 +278,6 @@ void initialize() {
     glEnable(GL_LIGHT0);                    // Enable light source 0
     glEnable(GL_COLOR_MATERIAL);            // Enable material coloring based on glColor
 
-   // GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };  // Light position (directional)
-   // glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
     glViewport(0, 0, 1024, 768);            // Set viewport size
     glMatrixMode(GL_PROJECTION);            // Switch to projection matrix mode
     glLoadIdentity();                       // Load identity matrix
@@ -274,9 +291,13 @@ void initialize() {
     venus.loadTexture("textures/venus.jpg");
     earth.loadTexture("textures/earth.jpg");
     mars.loadTexture("textures/mars.jpg");
-    moon.loadTexture("textures/mercury.jpg");
+    moon.loadTexture("textures/moon.jpg");
     saturn.loadTexture("textures/saturn.jpg");
     saturn.loadRingTexture("textures/saturnring.jpg");
+    jupiter.loadTexture("textures/jupiter.jpg");
+    uranus.loadTexture("textures/uranus.jpg");
+    neptune.loadTexture("textures/neptune.jpg");
+    pluto.loadTexture("textures/pluto.jpg");
 }
 
 void drawCameraTargetPoint() {
@@ -323,7 +344,6 @@ void drawAxes(float length) {
     glEnd();
 }
 
-
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear color and depth buffers
     glLoadIdentity();                                   // Load identity matrix
@@ -339,7 +359,11 @@ void display() {
         earth.drawOrbit();
         mars.drawOrbit();
         saturn.drawOrbit();
-        //moon.drawOrbit(earth.distanceFromSun, earth.x, earth.z);
+        moon.drawOrbit(earth.distanceFromSun, earth.x, earth.z);
+        jupiter.drawOrbit();
+        uranus.drawOrbit();
+        neptune.drawOrbit();
+        pluto.drawOrbit();
     }
 
     sun.drawAtPosition();
@@ -347,14 +371,14 @@ void display() {
     venus.drawAtPosition();
     earth.drawAtPosition();
     mars.drawAtPosition();
-    saturn.drawAtPosition();
-
     moon.drawAtPosition(earth.x, earth.y, earth.z);
+    saturn.drawAtPosition();
+    jupiter.drawAtPosition();
+    uranus.drawAtPosition();
+    neptune.drawAtPosition();
+    pluto.drawAtPosition();
 
     // Draw the camera target point
-
-    //drawAxes(2000.0f);  // You can adjust the length of the axes as needed
-
     drawCameraTargetPoint();
 
     printf("%f %f %f %f %f %f \n \n", camX, camY, camZ, centreX, centreY, centreZ);
@@ -365,11 +389,15 @@ void display() {
 void timer(int value) {
     revolutionAngle += 1.0f;                          // Increment revolution angle for all planets
     sunRotationAngle += sunRotationSpeed;
-    mercuryRotationAngle += mercuryRotationSpeed;    // Update rotation angle for Mercuryf
+    mercuryRotationAngle += mercuryRotationSpeed;    // Update rotation angle for Mercury
     venusRotationAngle += venusRotationSpeed;        // Update rotation angle for Venus
     earthRotationAngle += earthRotationSpeed;        // Update rotation angle for Earth
     marsRotationAngle += marsRotationSpeed;          // Update rotation angle for Mars
     moonRotationAngle += moonRotationSpeed;          // Update rotation angle for Moon
+    jupiterRotationAngle += jupiterRotationSpeed;
+    uranusRotationAngle += uranusRotationSpeed;
+    neptuneRotationAngle += neptuneRotationSpeed;
+    plutoRotationAngle += plutoRotationSpeed;
 
     glutPostRedisplay();                              // Request a redraw
     glutTimerFunc(1000 / TARGET_FPS, timer, 0);       // Schedule next update
