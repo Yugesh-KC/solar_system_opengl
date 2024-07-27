@@ -104,12 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\glm;C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Dell\Desktop\solar_system_opengl\glm;C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Dell\Desktop\solar_system_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;freeglutd.lib;glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;soil2-debug.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

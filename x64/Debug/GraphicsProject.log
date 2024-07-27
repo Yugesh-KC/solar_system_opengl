@@ -1,4 +1,4 @@
 ﻿  Source.cpp
-C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\planets.h(10,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\planets.h(41,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  GraphicsProject.vcxproj -> C:\Users\Oshika Neupane\OneDrive\Desktop\solarsystem\solar_system_opengl\x64\Debug\GraphicsProject.exe
+C:\Users\Dell\Desktop\solar_system_opengl\planets.h(10,32): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Dell\Desktop\solar_system_opengl\planets.h(41,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  GraphicsProject.vcxproj -> C:\Users\Dell\Desktop\solar_system_opengl\x64\Debug\GraphicsProject.exe
