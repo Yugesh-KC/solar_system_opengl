@@ -9,6 +9,10 @@
 const float EARTH_DAYS_IN_YEAR = 365.25;
 const float DEGREES_IN_CIRCLE = 360.0;
 float rotation_multiplier = 0.001f ;
+const float AU_IN_KM = 149597870.7;
+float distanceMultiplier=1.50f;
+float radiusMultiplier = 1.0f;
+
 
 // Function to load texture
 void loadTexture(GLuint* texture, const char* path) {
@@ -40,13 +44,14 @@ public:
     float x, y, z;
 
     Planet(float radius, float distance, float rotationPeriod,float axialtilt=0.0f,bool retrograde=false)
-        : radius(radius), distanceFromSun(distance), textureID(0), currentRotationAngle(0), currentRevolutionAngle(0),rotationalPeriod(rotationalPeriod),axialtilt(axialtilt) {
+        : radius(radius* radiusMultiplier), distanceFromSun(distance*distanceMultiplier+1.0f),textureID(0), currentRotationAngle(0), currentRevolutionAngle(0),rotationalPeriod(rotationalPeriod),axialtilt(axialtilt) {
 
         //Calculate rotationSpeed based on rotationPeriod i.e earth days per day of a planet
         //rotationSpeed = (2 * PI * radius) / (rotationalPeriod);
         // into degree per day
        //rotationSpeed = (rotationSpeed / 2 * PI * radius)* DEGREES_IN_CIRCLE;
         
+      //  distanceFromSun = (distance / AU_IN_KM)*distanceMultiplier;
         // Calculate the orbital period in Earth years
         float orbitalPeriodYears = pow(distanceFromSun, 1.5);
 

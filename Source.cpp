@@ -5,6 +5,7 @@
 #include "planets.h"
 
 bool showOrbits = true;
+float addedDistance = 2.0f;
 
 // Global rotation angles for the planets and their own rotation
 float revolutionAngle = 0.0f;
@@ -51,7 +52,7 @@ float neptuneRotationSpeed = 0.9f;
 float plutoRotationSpeed = 0.8f;*/
 
 // Sizes and distances
-float sunRadius = 1.0f;
+/*float sunRadius = 1.0f;
 float mercuryRadius = 0.1f;
 float venusRadius = 0.2f;
 float earthRadius = 0.3f;
@@ -60,15 +61,39 @@ float moonRadius = 0.05f;
 float jupiterRadius = 0.5f;
 float uranusRadius = 0.3f;
 float neptuneRadius = 0.2f;
-float plutoRadius = 0.1f;
+float plutoRadius = 0.1f;*/
 
-float mercuryDistance = 3.0f;
-float venusDistance = 5.0f;
-float earthDistance = 7.0f;
-float marsDistance = 8.0f;
-float moonDistance = 2.0f;  // Distance from Earth
-float jupiterDistance = 10.0f;
-float uranusDistance = 12.0f;
+/*float sunRadius = 10.0f;
+float mercuryRadius = 0.001631f;
+float venusRadius = 0.004046f;
+float earthRadius = 0.00004258f;
+float marsRadius = 0.002266f;
+float moonRadius = 0.001161f;
+float jupiterRadius = 0.00046702f;
+float uranusRadius = 0.00016949f;
+float neptuneRadius = 0.00016457f;
+float plutoRadius = 0.000794;*/
+
+const float sunRadius =2.0f;
+const float mercuryRadius = 0.035f;
+const float venusRadius = 0.087f;
+const float earthRadius = 0.091f;
+const float moonRadius = 0.025f;
+const float marsRadius = 0.049f;
+const float jupiterRadius = 0.1004f;
+const float saturnRadius = 0.0836f;
+const float uranusRadius = 0.364f;
+const float neptuneRadius = 0.353f;
+const float plutoRadius = 0.017f;
+
+float mercuryDistance = 1.0f;
+float venusDistance = 2.0f;
+float earthDistance = 3.0f;
+float marsDistance = 4.0f;
+float moonDistance = 0.1f;  // Distance from Earth
+float jupiterDistance = 7.0f;
+float saturnDistance = 10.0f;
+float uranusDistance = 13.0f;
 float neptuneDistance = 15.0f;
 float plutoDistance = 18.0f;
 
@@ -89,8 +114,7 @@ float plutoPeriod = 6.0f;
 float moonPeriod = 27.3f;
 float sunPeriod = 25.0f;
 
-// Orbital periods
-float mercuryOrbitalPeriod = 88.0f;
+/*float mercuryOrbitalPeriod = 88.0f;
 float venusOrbitalPeriod = 225.0f;
 float earthOrbitalPeriod = 365.0f;
 float marsOrbitalPeriod = 687.0f;
@@ -100,7 +124,8 @@ float uranusOrbitalPeriod = 30687.0f;
 float neptuneOrbitalPeriod = 60190.0f;
 float plutoOrbitalPeriod = 90520.0f;
 float moonOrbitalPeriod = 27.3f;
-float sunOrbitalPeriod = 25.0f;
+float sunOrbitalPeriod = 25.0f; Orbital periods*/
+
 
 //axialtilt
 float mercuryaxialtilt = 0.03f;
@@ -116,10 +141,10 @@ float moonaxialtilt = 27.3f;
 float sunaxialtilt = 25.0f;
 
 // Saturn
-float saturnRadius = 0.2f;
-float saturnDistance = 9.0f;
-float saturnringInnerRadius = 0.25f;
-float saturnringOuterRadius = 0.4f;
+//float saturnRadius = 0.00038927f;
+
+float saturnringInnerRadius = saturnRadius * 2.3f;
+float saturnringOuterRadius = saturnRadius*1.2f;
 float saturnRevolutionSpeed = 1.0f;
 float saturnRotationAngle = 1.0f;
 
