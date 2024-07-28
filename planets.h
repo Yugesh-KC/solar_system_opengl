@@ -1,3 +1,4 @@
+#define PI 3.14159265358979323846
 #pragma once
 #include "SOIL2/SOIL2.h"
 #include <cstdio>
@@ -7,7 +8,7 @@
 // Constants
 const float EARTH_DAYS_IN_YEAR = 365.25;
 const float DEGREES_IN_CIRCLE = 360.0;
-float rotation_multiplier = 0.3;
+float rotation_multiplier = 0.001f ;
 
 // Function to load texture
 void loadTexture(GLuint* texture, const char* path) {
@@ -28,15 +29,24 @@ class Planet {
 public:
     float radius;
     float distanceFromSun;
+    float rotationalPeriod;
+    //float orbitalPeriod;
     GLuint textureID;       // Texture ID
     float rotationSpeed;    // in degrees per day
     float revolutionSpeed;  // in degrees per day
     float currentRotationAngle;
+    float axialtilt;
     float currentRevolutionAngle;
     float x, y, z;
 
-    Planet(float radius, float distance, float rotationPeriod)
-        : radius(radius), distanceFromSun(distance), textureID(0), currentRotationAngle(0), currentRevolutionAngle(0) {
+    Planet(float radius, float distance, float rotationPeriod,float axialtilt=0.0f,bool retrograde=false)
+        : radius(radius), distanceFromSun(distance), textureID(0), currentRotationAngle(0), currentRevolutionAngle(0),rotationalPeriod(rotationalPeriod),axialtilt(axialtilt) {
+
+        //Calculate rotationSpeed based on rotationPeriod i.e earth days per day of a planet
+        //rotationSpeed = (2 * PI * radius) / (rotationalPeriod);
+        // into degree per day
+       //rotationSpeed = (rotationSpeed / 2 * PI * radius)* DEGREES_IN_CIRCLE;
+        
         // Calculate the orbital period in Earth years
         float orbitalPeriodYears = pow(distanceFromSun, 1.5);
 
@@ -47,7 +57,11 @@ public:
         revolutionSpeed = DEGREES_IN_CIRCLE / orbitalPeriodDays;
 
         // Calculate rotation speed in degrees per day
-        rotationSpeed = DEGREES_IN_CIRCLE / rotationPeriod;
+      rotationSpeed = DEGREES_IN_CIRCLE / rotationPeriod;
+
+      if (retrograde) {
+          rotationSpeed = -rotationSpeed;
+      }
     }
 
     void drawOrbit() {
@@ -92,6 +106,10 @@ public:
         x = distanceFromSun * cos(currentRevolutionAngle * 3.14159f / 180.0f);
         z = distanceFromSun * sin(currentRevolutionAngle * 3.14159f / 180.0f);
         glTranslatef(x, 0.0, z);    // Position relative to the Sun
+
+
+        // Apply axial tilt
+        glRotatef(axialtilt, 0.0, 0.0, 1.0);
         glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);    // Rotate around own axis
 
         draw();
@@ -148,8 +166,10 @@ public:
         // Translate to moon's position relative to the parent planet
         glTranslatef(x, 0.0, z);
 
+       
+
         // Rotate around own axis
-        glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);
+        glRotatef(currentRotationAngle * rotation_multiplier, 0.0, 1.0, 0.0);// Rotate around own tilted axis
 
         // Draw the moon
         draw();
@@ -195,8 +215,8 @@ public:
     float ringOuterRadius;
     GLuint ringTextureID;  // Texture ID for the rings
 
-    RingPlanet(float radius, float distance, float rotationPeriod, float ringInnerRadius, float ringOuterRadius)
-        : Planet(radius, distance, rotationPeriod),
+    RingPlanet(float radius, float distance, float rotationPeriod, float ringInnerRadius, float ringOuterRadius,float axialtile=0.0f)
+        : Planet(radius, distance, rotationPeriod,axialtilt),
         ringInnerRadius(ringInnerRadius), ringOuterRadius(ringOuterRadius), ringTextureID(0) {
     }
 
@@ -222,3 +242,5 @@ public:
         drawRings();     // Draw the rings
     }
 };
+
+

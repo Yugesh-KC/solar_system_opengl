@@ -28,7 +28,7 @@ const float movementSpeed = 0.4f;
 const float rotationSpeed = 0.04f; // for camera
 
 // Revolution speeds
-float mercuryRevolutionSpeed = 3.0f;
+/*float mercuryRevolutionSpeed = 3.0f;
 float venusRevolutionSpeed = 2.0f;
 float earthRevolutionSpeed = 1.0f;
 float marsRevolutionSpeed = 4.0f;
@@ -36,10 +36,10 @@ float moonRevolutionSpeed = 7.0f;
 float jupiterRevolutionSpeed = 2.0f;
 float uranusRevolutionSpeed = 1.0f;
 float neptuneRevolutionSpeed = 0.6f;
-float plutoRevolutionSpeed = 0.5f;
+float plutoRevolutionSpeed = 0.5f;*/
 
 // Rotation speeds
-float sunRotationSpeed = 1.0f;
+/*float sunRotationSpeed = 1.0f;
 float mercuryRotationSpeed = 2.13f;
 float venusRotationSpeed = 2.12f;
 float earthRotationSpeed = 1.0f;
@@ -48,7 +48,7 @@ float moonRotationSpeed = 1.3f;
 float jupiterRotationSpeed = 1.0f;
 float uranusRotationSpeed = 1.0f;
 float neptuneRotationSpeed = 0.9f;
-float plutoRotationSpeed = 0.8f;
+float plutoRotationSpeed = 0.8f;*/
 
 // Sizes and distances
 float sunRadius = 1.0f;
@@ -81,13 +81,43 @@ float mercuryPeriod = 58.6f;
 float venusPeriod = 243.0f;
 float earthPeriod = 1.0f;
 float marsPeriod = 1.03f;
+float jupitorPeriod = 0.42f;
+float saturnPeriod = 0.46f;
+float uranusPeriod = 0.71f;
+float neptunePeriod = 0.67f;
+float plutoPeriod = 6.0f;
 float moonPeriod = 27.3f;
 float sunPeriod = 25.0f;
-float saturnPeriod = 29.4f;
+
+// Orbital periods
+float mercuryOrbitalPeriod = 88.0f;
+float venusOrbitalPeriod = 225.0f;
+float earthOrbitalPeriod = 365.0f;
+float marsOrbitalPeriod = 687.0f;
+float jupitorOrbitalPeriod = 4333.0f;
+float saturnOrbitalPeriod = 10756.0f;
+float uranusOrbitalPeriod = 30687.0f;
+float neptuneOrbitalPeriod = 60190.0f;
+float plutoOrbitalPeriod = 90520.0f;
+float moonOrbitalPeriod = 27.3f;
+float sunOrbitalPeriod = 25.0f;
+
+//axialtilt
+float mercuryaxialtilt = 0.03f;
+float venusaxialtilt = 177.4f;
+float earthaxialtilt = 23.44f;
+float marsaxialtilt = 25.2f;
+float jupitoraxialtilt = 3.1f;
+float saturnaxialtilt = 26.7;
+float uranusaxialtilt = 97.8f;
+float neptuneaxialtilt = 28.3f;
+float plutoaxialtilt = 122.53f;
+float moonaxialtilt = 27.3f;
+float sunaxialtilt = 25.0f;
 
 // Saturn
 float saturnRadius = 0.2f;
-float saturnDistance = 6.0f;
+float saturnDistance = 9.0f;
 float saturnringInnerRadius = 0.25f;
 float saturnringOuterRadius = 0.4f;
 float saturnRevolutionSpeed = 1.0f;
@@ -95,16 +125,29 @@ float saturnRotationAngle = 1.0f;
 
 // Planets initialization
 Sun sun(sunRadius, 0.0f, sunPeriod);
-Planet mercury(mercuryRadius, mercuryDistance, mercuryPeriod);
-Planet venus(venusRadius, venusDistance, venusPeriod);
-Planet earth(earthRadius, earthDistance, earthPeriod);
-Planet mars(marsRadius, marsDistance, marsPeriod);
+Planet mercury(mercuryRadius, mercuryDistance, mercuryPeriod, mercuryaxialtilt);
+Planet venus(venusRadius, venusDistance, venusPeriod, venusaxialtilt,true);
+Planet earth(earthRadius, earthDistance, earthPeriod, earthaxialtilt);
+Planet mars(marsRadius, marsDistance, marsPeriod, marsaxialtilt);
 Moon moon(moonRadius, moonDistance, moonPeriod);
+RingPlanet saturn(saturnRadius, saturnDistance, saturnPeriod, saturnringInnerRadius, saturnringOuterRadius, saturnaxialtilt);
+Planet jupiter(jupiterRadius, jupiterDistance, jupitorPeriod, jupitoraxialtilt);
+Planet uranus(uranusRadius, uranusDistance, uranusPeriod, uranusaxialtilt);
+Planet neptune(neptuneRadius, neptuneDistance, neptunePeriod, neptuneaxialtilt);
+Planet pluto(plutoRadius, plutoDistance, plutoPeriod, plutoaxialtilt);
+
+/*Sun sun(sunRadius, 0.0f, sunPeriod, 0.0f);
+Planet mercury(mercuryRadius, mercuryDistance, mercuryPeriod, mercuryOrbitalPeriod);
+Planet venus(venusRadius, venusDistance, venusPeriod, venusOrbitalPeriod);
+Planet earth(earthRadius, earthDistance, earthPeriod, earthOrbitalPeriod);
+Planet mars(marsRadius, marsDistance, marsPeriod, marsOrbitalPeriod);
+Moon moon(moonRadius, moonDistance, moonPeriod, 0.0f);
 RingPlanet saturn(saturnRadius, saturnDistance, saturnPeriod, saturnringInnerRadius, saturnringOuterRadius);
-Planet jupiter(jupiterRadius, jupiterDistance, jupiterRevolutionSpeed);
-Planet uranus(uranusRadius, uranusDistance, uranusRevolutionSpeed);
-Planet neptune(neptuneRadius, neptuneDistance, neptuneRevolutionSpeed);
-Planet pluto(plutoRadius, plutoDistance, plutoRevolutionSpeed);
+Planet jupiter(jupiterRadius, jupiterDistance, jupiterRevolutionSpeed, jupitorOrbitalPeriod);
+Planet uranus(uranusRadius, uranusDistance, uranusRevolutionSpeed, uranusOrbitalPeriod);
+Planet neptune(neptuneRadius, neptuneDistance, neptuneRevolutionSpeed, neptuneOrbitalPeriod);
+Planet pluto(plutoRadius, plutoDistance, plutoRevolutionSpeed, plutoOrbitalPeriod);
+*/
 
 void toggleOrbitsVisibility() {
     showOrbits = !showOrbits; // Toggle the state
@@ -388,7 +431,7 @@ void display() {
 
 void timer(int value) {
     revolutionAngle += 1.0f;                          // Increment revolution angle for all planets
-    sunRotationAngle += sunRotationSpeed;
+   /* sunRotationAngle += sunRotationSpeed;
     mercuryRotationAngle += mercuryRotationSpeed;    // Update rotation angle for Mercury
     venusRotationAngle += venusRotationSpeed;        // Update rotation angle for Venus
     earthRotationAngle += earthRotationSpeed;        // Update rotation angle for Earth
@@ -397,7 +440,7 @@ void timer(int value) {
     jupiterRotationAngle += jupiterRotationSpeed;
     uranusRotationAngle += uranusRotationSpeed;
     neptuneRotationAngle += neptuneRotationSpeed;
-    plutoRotationAngle += plutoRotationSpeed;
+    plutoRotationAngle += plutoRotationSpeed;*/
 
     glutPostRedisplay();                              // Request a redraw
     glutTimerFunc(1000 / TARGET_FPS, timer, 0);       // Schedule next update
